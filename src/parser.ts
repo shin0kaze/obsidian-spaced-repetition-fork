@@ -78,7 +78,10 @@ export function parse(
             cardType = CardType.MultiLineReversed;
             lineNo = i;
         } else if (lines[i] === fileCardSeparator) {
-            cards.push([CardType.File, lines.join("\n"), i]);
+            const metaStarts = lines.indexOf("---");        
+            const metaEnds = metaStarts == 0 ? lines.indexOf("---", metaStarts + 1) + 1 : 0;
+            const linesFileCard = lines.slice(metaEnds, lines.length - 1).join("\n");
+            cards.push([CardType.File, linesFileCard, i]);
         } else if (lines[i].startsWith("```") || lines[i].startsWith("~~~")) {
             const codeBlockClose = lines[i].match(/`+|~+/)[0];
             while (i + 1 < lines.length && !lines[i + 1].startsWith(codeBlockClose)) {
