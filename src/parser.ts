@@ -16,6 +16,7 @@ export function parse(
     singlelineReversedCardSeparator: string,
     multilineCardSeparator: string,
     multilineReversedCardSeparator: string,
+    fileCardSeparator: string,
     convertHighlightsToClozes: boolean,
     convertBoldTextToClozes: boolean,
     convertCurlyBracketsToClozes: boolean
@@ -76,6 +77,8 @@ export function parse(
         } else if (lines[i] === multilineReversedCardSeparator) {
             cardType = CardType.MultiLineReversed;
             lineNo = i;
+        } else if (lines[i] === fileCardSeparator) {
+            cards.push([CardType.File, lines.join("\n"), i]);
         } else if (lines[i].startsWith("```") || lines[i].startsWith("~~~")) {
             const codeBlockClose = lines[i].match(/`+|~+/)[0];
             while (i + 1 < lines.length && !lines[i + 1].startsWith(codeBlockClose)) {

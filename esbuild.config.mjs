@@ -25,6 +25,10 @@ esbuild
         sourcemap: "inline",
         sourcesContent: !prod,
         treeShaking: true,
+        // minifyIdentifiers: true,
+        // minifySyntax: true,
+        // minifyWhitespace: true,
+        // minify: true,
         outfile: "build/main.js",
     })
     .catch(() => process.exit(1));

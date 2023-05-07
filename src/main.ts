@@ -652,6 +652,7 @@ export default class SRPlugin extends Plugin {
             settings.singleLineReversedCardSeparator,
             settings.multilineCardSeparator,
             settings.multilineReversedCardSeparator,
+            settings.fileCardSeparator,
             settings.convertHighlightsToClozes,
             settings.convertBoldTextToClozes,
             settings.convertCurlyBracketsToClozes
@@ -766,6 +767,11 @@ export default class SRPlugin extends Plugin {
                         );
                     siblingMatches.push([side1, side2]);
                     siblingMatches.push([side2, side1]);
+                } else if (cardType === CardType.File) {
+                    idx = cardText.indexOf("\n" + settings.fileCardSeparator + "\n");
+                    const side1: string = cardText.substring(0, idx),
+                        side2: string = cardText.substring(idx, cardText.length);
+                    siblingMatches.push([side1, side2]);
                 }
             }
 

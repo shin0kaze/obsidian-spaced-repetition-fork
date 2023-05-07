@@ -39,6 +39,7 @@ export enum CardType {
     SingleLineReversed,
     MultiLineBasic,
     MultiLineReversed,
+    File,
     Cloze,
 }
 

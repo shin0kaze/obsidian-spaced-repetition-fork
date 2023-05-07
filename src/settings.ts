@@ -22,6 +22,7 @@ export interface SRSettings {
     singleLineReversedCardSeparator: string;
     multilineCardSeparator: string;
     multilineReversedCardSeparator: string;
+    fileCardSeparator: string;
     editLaterTag: string;
     // notes
     enableNoteReviewPaneOnStartup: boolean;
@@ -59,10 +60,11 @@ export const DEFAULT_SETTINGS: SRSettings = {
     convertHighlightsToClozes: true,
     convertBoldTextToClozes: false,
     convertCurlyBracketsToClozes: false,
-    singleLineCardSeparator: "::",
-    singleLineReversedCardSeparator: ":::",
-    multilineCardSeparator: "?",
-    multilineReversedCardSeparator: "??",
+    singleLineCardSeparator: "%%?sr?%%",
+    singleLineReversedCardSeparator: "%%?sr_r?%%",
+    multilineCardSeparator: "%%?sr_ml?%%",
+    multilineReversedCardSeparator: "%%?sr_mlr?%%",
+    fileCardSeparator: "%%?sr_note?%%",
     editLaterTag: "#edit-later",
     // notes
     enableNoteReviewPaneOnStartup: true,
@@ -379,7 +381,28 @@ export class SRSettingTab extends PluginSettingTab {
                         this.display();
                     });
             });
-
+        new Setting(containerEl)
+            .setName(t("FILE_CARDS_SEPARATOR"))
+            .setDesc(t("FIX_SEPARATORS_MANUALLY_WARNING"))
+            .addText((text) =>
+                text.setValue(this.plugin.data.settings.fileCardSeparator).onChange((value) => {
+                    applySettingsUpdate(async () => {
+                        this.plugin.data.settings.fileCardSeparator = value;
+                        await this.plugin.savePluginData();
+                    });
+                })
+            )
+            .addExtraButton((button) => {
+                button
+                    .setIcon("reset")
+                    .setTooltip(t("RESET_DEFAULT"))
+                    .onClick(async () => {
+                        this.plugin.data.settings.fileCardSeparator =
+                            DEFAULT_SETTINGS.fileCardSeparator;
+                        await this.plugin.savePluginData();
+                        this.display();
+                    });
+            });
         new Setting(containerEl)
             .setName(t("FLASHCARD_EASY_LABEL"))
             .setDesc(t("FLASHCARD_EASY_DESC"))
