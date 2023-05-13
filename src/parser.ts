@@ -17,6 +17,7 @@ export function parse(
     multilineCardSeparator: string,
     multilineReversedCardSeparator: string,
     fileCardSeparator: string,
+    headingCardSeparator: string,
     convertHighlightsToClozes: boolean,
     convertBoldTextToClozes: boolean,
     convertCurlyBracketsToClozes: boolean
@@ -78,10 +79,33 @@ export function parse(
             cardType = CardType.MultiLineReversed;
             lineNo = i;
         } else if (lines[i] === fileCardSeparator) {
-            const metaStarts = lines.indexOf("---");        
+            const metaStarts = lines.indexOf("---");
             const metaEnds = metaStarts == 0 ? lines.indexOf("---", metaStarts + 1) + 1 : 0;
             const linesFileCard = lines.slice(metaEnds, lines.length - 1).join("\n");
             cards.push([CardType.File, linesFileCard, i]);
+        } else if (lines[i] === headingCardSeparator) {
+            let headingLvl=0;
+            let headStartlineNo;
+            const regexp = /^##{0,5}($| )/;
+            for (let line = i; line >= 0; line--) {
+                if (regexp.test(lines[line])) {
+                    headingLvl = lines[line].split(" ")[0].length;
+                    headStartlineNo = line;
+                    break;
+                }
+            }
+            if (headingLvl) {
+                for (let line = i; line < lines.length; line++) {
+                    if (regexp.test(lines[line]))
+                        if (headingLvl === lines[line].split(" ")[0].length) {
+                            const linesHeadingCard = lines
+                                .slice(headStartlineNo, line)
+                                .join("\n");
+                            cards.push([CardType.Heading, linesHeadingCard, i]);
+                            break;
+                        }
+                }
+            }
         } else if (lines[i].startsWith("```") || lines[i].startsWith("~~~")) {
             const codeBlockClose = lines[i].match(/`+|~+/)[0];
             while (i + 1 < lines.length && !lines[i + 1].startsWith(codeBlockClose)) {

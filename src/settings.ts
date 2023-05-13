@@ -23,6 +23,8 @@ export interface SRSettings {
     multilineCardSeparator: string;
     multilineReversedCardSeparator: string;
     fileCardSeparator: string;
+    headingCardSeparator: string;
+    threeCardSeparator: string;
     editLaterTag: string;
     // notes
     enableNoteReviewPaneOnStartup: boolean;
@@ -65,6 +67,8 @@ export const DEFAULT_SETTINGS: SRSettings = {
     multilineCardSeparator: "%%?sr_ml?%%",
     multilineReversedCardSeparator: "%%?sr_mlr?%%",
     fileCardSeparator: "%%?sr_note?%%",
+    headingCardSeparator: "%%?sr_head?%%",
+    threeCardSeparator: "%%?sr_3?%%",
     editLaterTag: "#edit-later",
     // notes
     enableNoteReviewPaneOnStartup: true,
@@ -399,6 +403,52 @@ export class SRSettingTab extends PluginSettingTab {
                     .onClick(async () => {
                         this.plugin.data.settings.fileCardSeparator =
                             DEFAULT_SETTINGS.fileCardSeparator;
+                        await this.plugin.savePluginData();
+                        this.display();
+                    });
+            });
+        new Setting(containerEl)
+            .setName(t("HEADING_CARDS_SEPARATOR"))
+            .setDesc(t("FIX_SEPARATORS_MANUALLY_WARNING"))
+            .addText((text) =>
+                text.setValue(this.plugin.data.settings.headingCardSeparator).onChange((value) => {
+                    applySettingsUpdate(async () => {
+                        this.plugin.data.settings.headingCardSeparator = value;
+                        await this.plugin.savePluginData();
+                    });
+                })
+            )
+            .addExtraButton((button) => {
+                button
+                    .setIcon("reset")
+                    .setTooltip(t("RESET_DEFAULT"))
+                    .onClick(async () => {
+                        this.plugin.data.settings.headingCardSeparator =
+                            DEFAULT_SETTINGS.headingCardSeparator;
+                        await this.plugin.savePluginData();
+                        this.display();
+                    });
+            });
+        new Setting(containerEl)
+            .setName(t("THREE_CARDS_SEPARATOR"))
+            .setDesc(t("FIX_SEPARATORS_MANUALLY_WARNING"))
+            .addText((text) =>
+                text
+                    .setValue(this.plugin.data.settings.threeCardSeparator)
+                    .onChange((value) => {
+                        applySettingsUpdate(async () => {
+                            this.plugin.data.settings.threeCardSeparator = value;
+                            await this.plugin.savePluginData();
+                        });
+                    })
+            )
+            .addExtraButton((button) => {
+                button
+                    .setIcon("reset")
+                    .setTooltip(t("RESET_DEFAULT"))
+                    .onClick(async () => {
+                        this.plugin.data.settings.threeCardSeparator =
+                            DEFAULT_SETTINGS.threeCardSeparator;
                         await this.plugin.savePluginData();
                         this.display();
                     });

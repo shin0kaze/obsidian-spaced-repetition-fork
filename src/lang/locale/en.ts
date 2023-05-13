@@ -95,6 +95,8 @@ export default {
     MULTILINE_CARDS_SEPARATOR: "Separator for multiline flashcards",
     MULTILINE_REVERSED_CARDS_SEPARATOR: "Separator for multiline reversed flashcards",
     FILE_CARDS_SEPARATOR: "Separator for entire note flashcards",
+    HEADING_CARDS_SEPARATOR: "Separator for heading flashcards",
+    THREE_CARDS_SEPARATOR: "Separator for custom lines range flashcards",
     NOTES: "Notes",
     REVIEW_PANE_ON_STARTUP: "Enable note review pane on startup",
     TAGS_TO_REVIEW: "Tags to review",
